@@ -1,0 +1,16 @@
+{
+  "name": "snes-music",
+  "private": true,
+  "type": "module",
+  "description": "Write hUGETracker songs and render them as Game Boy or 16-bit console music",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "render": "node render/cli.ts",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "vitest": "^5.0.2"
+  }
+}
