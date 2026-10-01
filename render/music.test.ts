@@ -193,6 +193,9 @@ describe("patchFor", () => {
   it("picks patches from instrument names and falls back per channel", () => {
     expect(patchFor("Choir Aah", 1)).toBe("choir");
     expect(patchFor("Harp", 0)).toBe("harp");
+    expect(patchFor("Electric Piano", 1)).toBe("piano");
+    expect(patchFor("Marimba", 1)).toBe("marimba");
+    expect(patchFor("Wind Whistle", 0)).toBe("whistle");
     expect(patchFor("Bass", 2)).toBe("bass");
     expect(patchFor("Lead", 0)).toBe("flute");
     expect(patchFor("", 1)).toBe("strings");

@@ -28,7 +28,11 @@ import struct
 
 REST = 90
 NAMES = {"C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11}
-CHORDS = {"": 0x47, "m": 0x37, "sus": 0x57, "sus2": 0x27, "5": 0x7C, "dim": 0x36, "aug": 0x48}
+# Two notes over the root. The 7th and 9th chords are shell voicings (root, third, seventh or ninth), which read as
+# jazz chords on the piano and organ patches.
+CHORDS = {"": 0x47, "m": 0x37, "sus": 0x57, "sus2": 0x27, "5": 0x7C, "dim": 0x36, "aug": 0x48,
+          "maj7": 0x4B, "m7": 0x3A, "7": 0x4A, "6": 0x49, "m6": 0x39, "add9": 0x4E, "m9": 0x3E}
+CHORD_RE = r"([A-G][#b]*)(maj7|m7|m6|m9|add9|m|sus2|sus|dim|aug|5|7|6)?:?(-?\d)"
 # Effects (hUGEDriver numbering).
 ARPEGGIO, PORTA_UP, PORTA_DOWN, TONE_PORTA, VIBRATO, SET_VOLUME, NOTE_CUT, SET_SPEED = 0, 1, 2, 3, 4, 12, 14, 15
 TRIANGLE = [0, 2, 4, 6, 8, 10, 12, 14, 15, 15, 14, 12, 10, 8, 6, 4, 2, 0, 0, 0, 2, 4, 6, 8, 10, 12, 14, 15, 14, 12, 8, 4]
@@ -87,11 +91,11 @@ class Pattern:
         return self
 
     def chords(self, channel, instrument, text, rows=16, start=0):
-        """Held chords as 'D3 Em3 Bm2', one per `rows`. The arpeggio is written on every row so it holds,
+        """Held chords as 'D3 Em3 Bm2 Fmaj7:3' (a colon may separate the octave), one per `rows`. The arpeggio is written on every row so it holds,
         which the 16-bit renderer plays as a real chord on sustained patches."""
         row = start
         for token in text.split():
-            m = re.fullmatch(r"([A-G][#b]*)(m|sus2|sus|5|dim|aug)?(-?\d)", token)
+            m = re.fullmatch(CHORD_RE, token)
             if not m:
                 raise ValueError(f"Bad chord {token!r}")
             root = instrument.note(m.group(1) + m.group(3))

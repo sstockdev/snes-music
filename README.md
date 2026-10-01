@@ -135,11 +135,14 @@ The song keeps its notes, timing and volume envelopes, but each channel plays a 
 
 | Patch | Picked by names containing | Sound |
 |---|---|---|
-| flute | flute, ocarina, whistle, recorder | Breathy lead with delayed vibrato. Default for channel 1. |
+| whistle | whistle, ocarina, bird, wind | A clean whistled sine with vibrato and a long echo. No breath, so it works for wind and birds. |
+| flute | flute, recorder | Breathy lead with delayed vibrato. Default for channel 1. |
 | strings | string, violin, viola, cello, pad | Three detuned saws, soft attack, held chords. Default for channel 2. |
 | choir | choir, voice, vox, aah, ooh | Wordless "aah", formant filtered, held chords. |
 | organ | organ | Drawbar organ, held chords. |
-| harp | harp, pluck, guitar, lute, lyre, piano | Plucked, decays on its own. |
+| piano | piano, rhodes, keys | Electric piano: FM bite and a tine ping, held chords for comping (try 7th chords). |
+| marimba | marimba, kalimba, xylo, mallet, vibes | Wooden bar, short and warm. |
+| harp | harp, pluck, guitar, lute, lyre | Plucked, decays on its own. |
 | bell | bell, chime, glock, celesta | FM bell. |
 | brass | brass, horn, trumpet, fanfare | Saw with an opening filter. |
 | reed | reed, oboe, clarinet, bassoon | Narrow pulse, filtered. |

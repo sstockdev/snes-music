@@ -8,7 +8,7 @@ import type { Voice } from "./player.ts";
 
 export const SNES_RATE = 32000;
 
-export const PATCHES = ["flute", "strings", "choir", "organ", "harp", "bell", "brass", "reed", "bass", "chip", "drums"] as const;
+export const PATCHES = ["flute", "whistle", "strings", "choir", "organ", "harp", "piano", "marimba", "bell", "brass", "reed", "bass", "chip", "drums"] as const;
 export type PatchName = (typeof PATCHES)[number];
 
 interface Patch {
@@ -27,10 +27,13 @@ interface Patch {
 
 const PATCH: Record<PatchName, Patch> = {
   flute: { attack: 0.04, release: 0.15, vibrato: [5, 14, 0.25], pan: 0, send: 0.35, gain: 0.9 },
+  whistle: { attack: 0.03, release: 0.2, vibrato: [5, 10, 0.2], pan: 0, send: 0.6, gain: 0.8 },
   strings: { attack: 0.09, release: 0.35, vibrato: [5.5, 8, 0.2], chords: true, detune: [-8, 0, 8], pan: 0.25, send: 0.5, gain: 0.7 },
   choir: { attack: 0.16, release: 0.5, vibrato: [4.8, 12, 0.3], chords: true, detune: [-10, 0, 9], pan: -0.15, send: 0.6, gain: 1.6 },
   organ: { attack: 0.01, release: 0.12, chords: true, pan: 0, send: 0.45, gain: 0.55 },
   harp: { attack: 0.003, release: 0.5, pan: -0.3, send: 0.5, gain: 0.9 },
+  piano: { attack: 0.002, release: 0.25, chords: true, pan: -0.1, send: 0.4, gain: 0.8 },
+  marimba: { attack: 0.001, release: 0.15, pan: 0.25, send: 0.4, gain: 1.1 },
   bell: { attack: 0.002, release: 0.6, pan: 0.3, send: 0.6, gain: 0.7 },
   brass: { attack: 0.03, release: 0.12, vibrato: [5, 8, 0.3], pan: 0, send: 0.3, gain: 0.6 },
   reed: { attack: 0.03, release: 0.1, vibrato: [5.5, 10, 0.2], pan: 0.1, send: 0.35, gain: 0.6 },
@@ -40,11 +43,14 @@ const PATCH: Record<PatchName, Patch> = {
 };
 
 const KEYWORDS: [RegExp, PatchName][] = [
-  [/flute|ocarina|whistle|recorder/, "flute"],
+  [/whistle|ocarina|bird|wind/, "whistle"],
+  [/flute|recorder/, "flute"],
   [/string|violin|viola|cello|pad/, "strings"],
   [/choir|voice|vox|aah|ooh/, "choir"],
   [/organ/, "organ"],
-  [/harp|pluck|guitar|lute|lyre|piano/, "harp"],
+  [/piano|rhodes|keys/, "piano"],
+  [/marimba|kalimba|xylo|mallet|vibes/, "marimba"],
+  [/harp|pluck|guitar|lute|lyre/, "harp"],
   [/bell|chime|glock|celesta/, "bell"],
   [/brass|horn|trumpet|fanfare/, "brass"],
   [/reed|oboe|clarinet|bassoon/, "reed"],
@@ -142,6 +148,21 @@ class PatchVoice {
         let y = 0;
         for (let h = 1; h <= 5 && freq * h < this.sr / 2; h++) y += Math.exp(-this.t * h * 1.6) * Math.sin(h * TAU * x) / h;
         return y * Math.exp(-this.t * 1.4);
+      }
+      case "whistle":
+        return Math.sin(TAU * x) + 0.08 * Math.sin(2 * TAU * x);
+      case "piano": {
+        // An electric piano: a sine with a fading FM bite and a short tine ping on top.
+        const bite = 0.25 + 1.3 * Math.exp(-this.t * 7);
+        let y = Math.sin(TAU * x + bite * Math.sin(TAU * x));
+        if (freq * 14 < this.sr / 2) y += 0.12 * Math.exp(-this.t * 40) * Math.sin(14 * TAU * x);
+        return y * Math.exp(-this.t * 0.9);
+      }
+      case "marimba": {
+        // A bar: the fundamental plus the bright fourth partial that dies away first.
+        let y = Math.sin(TAU * x);
+        if (freq * 4 < this.sr / 2) y += 0.4 * Math.exp(-this.t * 25) * Math.sin(4 * TAU * x);
+        return y * Math.exp(-this.t * 4.5);
       }
       case "bell":
         return Math.sin(TAU * x + 2.2 * Math.exp(-this.t * 3) * Math.sin(3.5 * TAU * x)) * Math.exp(-this.t * 1.1);
