@@ -2,7 +2,7 @@
 Audio-to-UGE Converter
 Converts MP3/M4A/WAV to Game Boy .uge format via librosa analysis.
 
-Requirements: pip install librosa --break-system-packages
+Requirements: pip install librosa
 
 Usage:
     python audio_to_uge.py input.mp3 output.uge [--key auto] [--tempo auto]
@@ -14,7 +14,7 @@ import numpy as np
 try:
     import librosa
 except ImportError:
-    print("librosa not installed. Run: pip install librosa --break-system-packages")
+    print("librosa not installed. Run: pip install librosa")
     sys.exit(1)
 
 

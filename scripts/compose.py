@@ -20,8 +20,9 @@ Pitches are written as they should sound. The Game Boy wave channel plays an oct
 the same tracker note, so wave instruments are shifted to match. Noise hits take a tracker note directly (32-63, or
 24 with a pitch table, as in references/uge_format.md).
 
-Instrument names matter to the 16-bit renderer (render/cli.ts): "Flute", "Strings", "Choir", "Organ", "Harp",
-"Bell", "Brass", "Reed", "Bass", "Chip" and "Drums"/"Kick"/"Snare"/"Hat" each pick a patch.
+Instrument names matter to the 16-bit renderer (render/cli.ts): "Whistle", "Flute", "Strings", "Choir", "Organ",
+"Piano", "Marimba", "Harp", "Bell", "Brass", "Reed", "Bass", "Chip" and "Drums"/"Kick"/"Snare"/"Hat" each pick a
+patch. README.md lists the names each one answers to.
 """
 import re
 import struct

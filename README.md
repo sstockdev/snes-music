@@ -1,6 +1,6 @@
 # snes-music
 
-A Claude Code skill for writing tracker music and turning it into audio. It started as [kurum-inc/gb-music](https://github.com/kurum-inc/gb-music), which writes Game Boy songs (`.uge`) and sound effects (`.sav`) for GB Studio. This copy adds:
+An [Agent Skill](https://agentskills.io) for writing tracker music and turning it into audio. It started as [kurum-inc/gb-music](https://github.com/kurum-inc/gb-music), which writes Game Boy songs (`.uge`) and sound effects (`.sav`) for GB Studio. This copy adds:
 
 - **`scripts/compose.py`**: write songs with note names and chord symbols instead of raw tracker cells.
 - **`render/`**: render a `.uge` to a seamless mp3 or wav loop, as Game Boy hardware or as 16-bit console music with SNES-style instruments and echo.
@@ -9,13 +9,20 @@ So you can write a song as notes, hear it as a 16-bit score, and drop the mp3 in
 
 ## Install
 
-Clone into a project's `.claude/skills/` folder:
+With the [skills CLI](https://skills.sh):
+
+```bash
+npx skills add sstockdev/snes-music        # this project
+npx skills add sstockdev/snes-music -g     # all projects
+```
+
+Or clone it into a project's `.claude/skills/` folder:
 
 ```bash
 git clone https://github.com/sstockdev/snes-music.git .claude/skills/snes-music
 ```
 
-To use the skill inside another project, take the files without the `.git` folder, or add it as a submodule. A nested clone with its own `.git` won't commit cleanly.
+A nested clone with its own `.git` won't commit cleanly inside another repo, so take the files without `.git` or add it as a submodule.
 
 You need:
 
@@ -86,7 +93,7 @@ A line that runs past row 64 raises an error, which catches miscounted bars.
 
 ### `chords(channel, instrument, text, rows=16, start=0)`
 
-Held chords such as `D3 Em3 Bm2 F#m3`, one every `rows` rows. Qualities: none (major), `m`, `sus`, `sus2`, `5`, `dim`, `aug`. On the Game Boy a chord is a fast arpeggio. The 16-bit renderer plays it as a real held chord on strings, choir and organ.
+Held chords such as `D3 Em3 Bm2 F#m3`, one every `rows` rows. Qualities: none (major), `m`, `sus`, `sus2`, `5`, `dim`, `aug`, `7`, `maj7`, `m7`, `6`, `m6`, `add9`, `m9`. On the Game Boy a chord is a fast arpeggio. The 16-bit renderer plays it as a real held chord on strings, choir and organ.
 
 ### `hits(channel, instrument, rows, note=24)`
 
@@ -187,6 +194,12 @@ npm install
 npm test
 ```
 
+## Credits
+
+- **Author:** Sam Stockstrom ([sstockdev](https://github.com/sstockdev))
+- **Co-author:** Claude (Anthropic)
+- **Based on:** [kurum-inc/gb-music](https://github.com/kurum-inc/gb-music) by Kuniiskywalker, which wrote the GB Studio `.uge`/`.sav` generators and format references
+
 ## License
 
-MIT. The original skill is by Kuniiskywalker; `compose.py`, `render/` and `examples/` were added by sstockdev.
+MIT. See LICENSE.

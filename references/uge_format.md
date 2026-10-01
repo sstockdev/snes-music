@@ -185,3 +185,12 @@ Codes follow the jump table in `hUGEDriver.asm`. Code 0 with param 0 means "no e
 | 13 (0xD) | Pattern break | row (global) |
 | 14 (0xE) | Note cut | ticks (0 = cut immediately) |
 | 15 (0xF) | Set speed | new ticks_per_row (global) |
+
+## File Size Reference
+
+Expected .uge file sizes, for validating a hand-written file:
+
+- 1 pattern, 1-entry sequence: ~68,102 bytes
+- 2 patterns, 2-entry sequence: ~72,486 bytes
+- 2 patterns, 4-entry sequence: ~72,518 bytes
+- 3 patterns, 4-entry sequence: ~76,886 bytes

@@ -3,6 +3,13 @@
   "private": true,
   "type": "module",
   "description": "Write hUGETracker songs and render them as Game Boy or 16-bit console music",
+  "author": "Sam Stockstrom (https://github.com/sstockdev)",
+  "contributors": [
+    "Claude (Anthropic)",
+    "Kuniiskywalker (https://github.com/kurum-inc/gb-music)"
+  ],
+  "license": "MIT",
+  "repository": "github:sstockdev/snes-music",
   "engines": {
     "node": ">=22.18"
   },
