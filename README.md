@@ -103,7 +103,7 @@ Notes below 32 are almost silent and notes above 63 buzz. `references/uge_format
 |---|---|
 | `duty(name, volume=12, pace=0, up=False, duty=2, table=None)` | `volume` 0 to 15. `pace` 0 holds the note; 1 to 7 fades it one step every pace/64 s. `duty` 0 to 3 is 12.5, 25, 50 or 75% pulse width. |
 | `wave(name, level=1, wave=0, table=None)` | `level` 1 is full, 2 half, 3 quarter. `wave` picks one of 16 wave tables in `song.waves` (0 is a triangle). |
-| `noise(name, volume=10, pace=2, short=False, table=None)` | `short` is the metallic 7-bit noise. `table` holds per-tick notes as offsets: 36 means no change, 90 keeps the last one. |
+| `noise(name, volume=10, pace=2, up=False, short=False, table=None)` | `up` makes the envelope rise for swells. `short` is the metallic 7-bit noise. `table` holds per-tick notes as offsets: 36 means no change, 90 keeps the last one. |
 
 Pick each instrument's name with care, because the 16-bit renderer chooses its sound from the name.
 
@@ -159,7 +159,7 @@ By default the output is exactly one loop. The renderer plays the song twice and
 
 The loop is the stretch between the song's first repeated pattern and its return. If the order jumps back somewhere other than the start, the patterns before the loop point are an intro, and the loop render leaves them out (the renderer warns you).
 
-`--once` plays the song through once and lets it ring for 3 seconds, for jingles and stingers.
+`--once` plays the song through once and lets it ring for 3 seconds (`--tail 0.5` to change that), for jingles, stingers and sound effects. A pattern break (`pattern.set(ch, row, effect=13)`) ends a sound shorter than one pattern.
 
 Every render is normalized so its peak sits at -1 dBFS. `--peak=-6` (or lower) makes a quieter file, which is handy for background music that sits under dialogue. Negative values need the `=` form.
 

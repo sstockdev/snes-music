@@ -42,10 +42,11 @@ export function render(song: Song, options: RenderOptions): Rendered {
   let loop: [number, number] | null = null;
   let last: Frame | null = null;
   while (tickStart(tick) < stopAt) {
+    // Past the end of a one-shot: hold every channel released so tails ring out.
+    const released = (f: Frame): Frame => ({ ...f, voices: f.voices.map((v) => ({ ...v, gate: false, trigger: false, reload: false })) });
     let frame: Frame;
     if (options.once && loop && tick >= loop[1] && last) {
-      // Past the end of a one-shot: hold every channel released so tails ring out.
-      frame = { ...last, voices: last.voices.map((v) => ({ ...v, gate: false, trigger: false, reload: false })) };
+      frame = released(last);
     } else {
       frame = player.step();
       if (!loop && player.loop) {
@@ -53,6 +54,8 @@ export function render(song: Song, options: RenderOptions): Rendered {
         const [start, end] = loop.map(tickStart);
         // A one-shot keeps its tail; a loop renders a second pass so echo and releases carry over the seam.
         stopAt = Math.min(max, options.once ? end + Math.round((options.tail ?? 3) * sampleRate) : 2 * end - start);
+        // The step that finds the loop has already started the song again; a one-shot must not replay its first row.
+        if (options.once && tick >= loop[1] && last) frame = released(last);
       }
     }
     last = frame;

@@ -164,6 +164,14 @@ describe("render", () => {
     expect(out.left.length / out.sampleRate).toBeCloseTo(loopSeconds + 1, 2);
   });
 
+  it("doesn't replay the first row after a one-shot ends", () => {
+    const bytes = uge({ speed: 1, rows: { 0: { 0: [24, 1], 8: [REST, 0, 14, 0], 15: [REST, 0, 13, 0] } } });
+    const out = render(parseUge(bytes), { style: "gb", once: true, tail: 0.5 });
+    const end = Math.round((16 / VBLANK_HZ) * out.sampleRate);
+    const after = out.left.slice(end, end + Math.round(0.1 * out.sampleRate));
+    expect(after.reduce((p, x) => Math.max(p, Math.abs(x)), 0)).toBeLessThan(0.01);
+  });
+
   it("normalizes to the requested peak", () => {
     const out = render(song(), { style: "gb", peak: -6 });
     const peak = [...out.left, ...out.right].reduce((p, x) => Math.max(p, Math.abs(x)), 0);

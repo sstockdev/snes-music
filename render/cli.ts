@@ -13,6 +13,7 @@ Renders a hUGETracker song (the snes-music skill's .uge files) to a looping mp3 
 Options:
   --style snes|gb     snes (default): 16-bit voicing with patches and echo. gb: Game Boy hardware sound.
   --once              Play through once with a tail, for jingles. By default the output is one seamless loop.
+  --tail <seconds>    How long a --once render rings after the song ends (default 3).
   --echo <0-1>        Echo amount for --style snes (default 1).
   --peak=<dB>         Peak level in dBFS (default -1), e.g. --peak=-6 for a quieter track.
   --patch <ch>=<name> Force a patch on channel 1-4, e.g. --patch 2=choir. Repeatable.
@@ -24,6 +25,7 @@ const { values, positionals } = parseArgs({
   options: {
     style: { type: "string", default: "snes" },
     once: { type: "boolean", default: false },
+    tail: { type: "string" },
     echo: { type: "string" },
     peak: { type: "string" },
     patch: { type: "string", multiple: true },
@@ -51,6 +53,7 @@ const started = Date.now();
 const out = render(song, {
   style: values.style as Style,
   once: values.once,
+  tail: values.tail === undefined ? undefined : Number(values.tail),
   echo: values.echo === undefined ? undefined : Number(values.echo),
   peak: values.peak === undefined ? undefined : Number(values.peak),
   patches,

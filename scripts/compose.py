@@ -131,9 +131,10 @@ class Song:
         """Wave instrument. level: 1 full, 2 half, 3 quarter."""
         return self._add("wave", name, level=level, wave=wave, table=table)
 
-    def noise(self, name, volume=10, pace=2, short=False, table=None):
-        """Noise instrument. table: per-tick tracker notes, offsets from the hit (36 = no change, 90 = keep)."""
-        return self._add("noise", name, volume=volume, pace=pace, short=short, table=table)
+    def noise(self, name, volume=10, pace=2, up=False, short=False, table=None):
+        """Noise instrument. up: the envelope rises instead of fading. table: per-tick tracker notes, offsets from the
+        hit (36 = no change, 90 = keep)."""
+        return self._add("noise", name, volume=volume, pace=pace, up=up, short=short, table=table)
 
     def pattern(self):
         p = Pattern()
